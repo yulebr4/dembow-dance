@@ -8,9 +8,9 @@ Rhythm game dominicano desarrollado en Unity 6 para ISW-414
 
 \##  Información del Proyecto
 
-\- \*\*Estudiante:\*\* \[Tu Nombre Completo]
+\- \*\*Estudiante:\*\* \Yulenny Bonilla
 
-\- \*\*Matrícula:\*\* \[Tu Matrícula]
+\- \*\*Matrícula:\*\* \2023-0769
 
 \- \*\*Materia:\*\* ISW-414 Programación de Videojuegos
 
