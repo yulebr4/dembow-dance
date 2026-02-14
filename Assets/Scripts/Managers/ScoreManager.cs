@@ -83,10 +83,13 @@ public class ScoreManager : MonoBehaviour
         if (health < 0)
             health = 0;
 
-        // TODO: Game Over cuando health = 0
+        // Game Over cuando health = 0
         if (health <= 0)
         {
-            Debug.Log("GAME OVER!");
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.GameOver();
+            }
         }
     }
 
