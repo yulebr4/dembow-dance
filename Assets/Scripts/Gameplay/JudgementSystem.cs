@@ -5,6 +5,7 @@ public class JudgementSystem : MonoBehaviour
 {
     [Header("Referencias")]
     public Transform[] hitZones; // Las 4 zonas de golpeo
+    public ScoreManager scoreManager;
 
     [Header("Timing Windows (en segundos)")]
     public float perfectWindow = 0.05f;  // ±50ms
@@ -45,6 +46,12 @@ public class JudgementSystem : MonoBehaviour
 
         if (showDebugMessages)
             Debug.Log($"{judgement}! Lane {laneIndex} - Distancia: {distance:F3}");
+
+        // Notificar al ScoreManager
+        if (scoreManager != null)
+        {
+            scoreManager.AddScore(judgement);
+        }
 
         // Destruir la nota si acertó
         if (judgement != "Miss")
