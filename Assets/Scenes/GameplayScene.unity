@@ -907,6 +907,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2110837527}
   - component: {fileID: 2110837526}
+  - component: {fileID: 2110837529}
+  - component: {fileID: 2110837528}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -949,6 +951,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2110837528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110837525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1825099d16f22dc4dba4ae9dee499512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitZones:
+  - {fileID: 146146248}
+  - {fileID: 1929723594}
+  - {fileID: 770824717}
+  - {fileID: 1101557009}
+  perfectWindow: 0.05
+  goodWindow: 0.1
+  missWindow: 0.15
+  showDebugMessages: 1
+--- !u!114 &2110837529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110837525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f14c3cd17bc0524abf7fefc3b7cc58d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  judgementSystem: {fileID: 2110837528}
+  laneKeys: 14010000120100001101000013010000
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
