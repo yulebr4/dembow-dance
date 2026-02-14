@@ -35,6 +35,12 @@ public class JudgementSystem : MonoBehaviour
         {
             if (showDebugMessages)
                 Debug.Log($"Miss - No hay nota en Lane {laneIndex}");
+
+            // Notificar Miss al ScoreManager
+            if (scoreManager != null)
+            {
+                scoreManager.AddScore("Miss");
+            }
             return;
         }
 
