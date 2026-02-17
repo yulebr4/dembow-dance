@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5139276853496823873}
   - component: {fileID: 3172140319581911780}
   - component: {fileID: 779407336106281220}
+  - component: {fileID: -8473841546838882875}
   m_Layer: 0
   m_Name: Note
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.91188633, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -101,3 +102,24 @@ MonoBehaviour:
   laneIndex: 0
   spawnTime: 0
   hitTime: 0
+--- !u!114 &-8473841546838882875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5416164178605153175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1627bce0fe9fdc94189215eeacd56d47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noteSprites:
+  - {fileID: 21300000, guid: ce1efbf7e154f8644ba7e45916b3ddfc, type: 3}
+  - {fileID: 21300000, guid: c78c6f098fe247d40be9d9e6c6803f93, type: 3}
+  - {fileID: 21300000, guid: 54f4a118bff375a4fb4d435a741b91c9, type: 3}
+  - {fileID: 21300000, guid: a0d43769ec4a5134095afaa5f7f32c72, type: 3}
+  - {fileID: 21300000, guid: f7d8d48230162874f9c0f4897fb1d8c7, type: 3}
+  - {fileID: 21300000, guid: d96f2cd4e5106ae4980afcea4b370d22, type: 3}
+  - {fileID: 21300000, guid: afb5629d70adf8243bea10063d2092f7, type: 3}
+  - {fileID: 21300000, guid: 76d28eeb99c762145a8750d195740048, type: 3}

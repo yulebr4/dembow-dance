@@ -13,10 +13,33 @@ public class NoteSpawner : MonoBehaviour
     public float spawnY = 6f;
     public float testSpawnInterval = 1f; // Para testing
 
+    private Coroutine spawnCoroutine; // Guardar referencia a la coroutine
+
     private void Start()
     {
-        // TEST: Spawning automático cada segundo
-        StartCoroutine(TestSpawning());
+        // Iniciar spawning automático
+        StartSpawning();
+    }
+
+    // Método para iniciar el spawning
+    public void StartSpawning()
+    {
+        if (spawnCoroutine == null)
+        {
+            spawnCoroutine = StartCoroutine(TestSpawning());
+            Debug.Log("Spawning iniciado");
+        }
+    }
+
+    // Método para detener el spawning
+    public void StopSpawning()
+    {
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+            Debug.Log("Spawning detenido");
+        }
     }
 
     IEnumerator TestSpawning()
@@ -46,5 +69,17 @@ public class NoteSpawner : MonoBehaviour
         Note note = noteObj.GetComponent<Note>();
         note.laneIndex = laneIndex;
         note.spawnTime = Time.time;
+    }
+
+    // Se llama automáticamente cuando el script se desactiva
+    private void OnDisable()
+    {
+        StopSpawning();
+    }
+
+    // Se llama automáticamente cuando el objeto se destruye
+    private void OnDestroy()
+    {
+        StopSpawning();
     }
 }

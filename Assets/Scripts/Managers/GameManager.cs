@@ -33,7 +33,22 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        ShowMainMenu();
+        // Verificar si estamos reiniciando el juego
+        int isRestarting = PlayerPrefs.GetInt("IsRestarting", 0);
+
+        if (isRestarting == 1)
+        {
+            // Limpiar la marca
+            PlayerPrefs.SetInt("IsRestarting", 0);
+
+            // Iniciar el juego directamente
+            StartGame();
+        }
+        else
+        {
+            // Mostrar menú principal normalmente
+            ShowMainMenu();
+        }
     }
 
     public void ShowMainMenu()
@@ -41,22 +56,46 @@ public class GameManager : MonoBehaviour
         isPlaying = false;
         Time.timeScale = 1f;
 
+        Debug.Log("Mostrando menú principal...");
+
+        if (PauseManager.Instance != null)
+        {
+            PauseManager.Instance.HidePausePanel();
+        }
+
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(true);
-
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
-
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
-        // Desactivar spawning
+        // DETENER SPAWNER
         if (noteSpawner != null)
+        {
+            noteSpawner.StopSpawning(); // Usar el nuevo método
             noteSpawner.enabled = false;
+            Debug.Log("Spawner detenido");
+        }
 
-        // Desactivar input
         if (inputManager != null)
             inputManager.enabled = false;
+
+        // LIMPIAR NOTAS
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+        int notasDestruidas = 0;
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj != null && (obj.name.Contains("Note") || obj.GetComponent<Note>() != null))
+            {
+                Destroy(obj);
+                notasDestruidas++;
+            }
+        }
+
+        Debug.Log($"{notasDestruidas} notas destruidas");
+        Debug.Log("Menú principal listo");
     }
 
     public void StartGame()
@@ -65,14 +104,11 @@ public class GameManager : MonoBehaviour
 
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(false);
-
         if (gameplayPanel != null)
             gameplayPanel.SetActive(true);
-
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
-        // Resetear score
         if (scoreManager != null)
         {
             scoreManager.score = 0;
@@ -80,19 +116,21 @@ public class GameManager : MonoBehaviour
             scoreManager.health = scoreManager.maxHealth;
         }
 
-        // Activar spawning
         if (noteSpawner != null)
         {
             noteSpawner.enabled = true;
+
             // Limpiar notas viejas
             Note[] oldNotes = FindObjectsOfType<Note>();
             foreach (Note note in oldNotes)
             {
                 Destroy(note.gameObject);
             }
+
+            // INICIAR SPAWNING
+            noteSpawner.StartSpawning();
         }
 
-        // Activar input
         if (inputManager != null)
             inputManager.enabled = true;
     }
@@ -100,18 +138,20 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isPlaying = false;
+        Time.timeScale = 0f; // Pausar juego
 
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
-
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
-        // Desactivar spawning
+        // DETENER SPAWNER
         if (noteSpawner != null)
+        {
+            noteSpawner.StopSpawning();
             noteSpawner.enabled = false;
+        }
 
-        // Desactivar input
         if (inputManager != null)
             inputManager.enabled = false;
 
@@ -120,6 +160,8 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        Time.timeScale = 1f;
+        PlayerPrefs.SetInt("IsRestarting", 1); // Marca que estamos reiniciando
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
