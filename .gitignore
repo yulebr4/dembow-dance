@@ -7,12 +7,29 @@
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
 
-# Visual Studio cache
-.vs/
+# Archivos de proyecto de Unity (¡ESTOS FALTABAN!)
+*.csproj
+*.sln
+*.suo
+*.userprefs
+*.pidb
+*.booproj
 
-# Rider cache
+# Visual Studio
+.vs/
+*.user
+
+# Rider / JetBrains
 .idea/
+
+# VS Code
+.vscode/
 
 # OS generated
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Archivos de backup
+*.bak
+*.tmp

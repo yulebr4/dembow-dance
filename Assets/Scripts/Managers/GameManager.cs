@@ -1,5 +1,6 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class GameManager : MonoBehaviour
     public NoteSpawner noteSpawner;
     public InputManager inputManager;
     public ScoreManager scoreManager;
+
+    [Header("UI Pixelada - NUEVO")]
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI comboText;
+    [SerializeField] private PixelHealthBar healthBar;
+    [SerializeField] private TextMeshProUGUI finalScoreText;
 
     [Header("Estado del Juego")]
     public bool isPlaying = false;
@@ -49,6 +56,29 @@ public class GameManager : MonoBehaviour
             // Mostrar menú principal normalmente
             ShowMainMenu();
         }
+
+        // Inicializar UI
+        InitializeUI();
+    }
+
+    // NUEVO: Inicializar la UI
+    private void InitializeUI()
+    {
+        // Configurar textos iniciales
+        UpdateScore(0);
+        UpdateCombo(0);
+
+        if (scoreManager != null)
+        {
+            UpdateHealth(scoreManager.maxHealth);
+        }
+        else
+        {
+            UpdateHealth(100);
+        }
+
+        if (finalScoreText != null)
+            finalScoreText.text = "PUNTAJE FINAL\n000000";
     }
 
     public void ShowMainMenu()
@@ -73,7 +103,7 @@ public class GameManager : MonoBehaviour
         // DETENER SPAWNER
         if (noteSpawner != null)
         {
-            noteSpawner.StopSpawning(); // Usar el nuevo método
+            noteSpawner.StopSpawning();
             noteSpawner.enabled = false;
             Debug.Log("Spawner detenido");
         }
@@ -82,20 +112,10 @@ public class GameManager : MonoBehaviour
             inputManager.enabled = false;
 
         // LIMPIAR NOTAS
-        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
-        int notasDestruidas = 0;
+        CleanupNotes();
 
-        foreach (GameObject obj in allObjects)
-        {
-            if (obj != null && (obj.name.Contains("Note") || obj.GetComponent<Note>() != null))
-            {
-                Destroy(obj);
-                notasDestruidas++;
-            }
-        }
-
-        Debug.Log($"{notasDestruidas} notas destruidas");
-        Debug.Log("Menú principal listo");
+        // Resetear UI
+        InitializeUI();
     }
 
     public void StartGame()
@@ -114,20 +134,17 @@ public class GameManager : MonoBehaviour
             scoreManager.score = 0;
             scoreManager.combo = 0;
             scoreManager.health = scoreManager.maxHealth;
+
+            // Actualizar UI con valores del ScoreManager
+            UpdateScore(0);
+            UpdateCombo(0);
+            UpdateHealth(scoreManager.maxHealth);
         }
 
         if (noteSpawner != null)
         {
             noteSpawner.enabled = true;
-
-            // Limpiar notas viejas
-            Note[] oldNotes = FindObjectsOfType<Note>();
-            foreach (Note note in oldNotes)
-            {
-                Destroy(note.gameObject);
-            }
-
-            // INICIAR SPAWNING
+            CleanupNotes();
             noteSpawner.StartSpawning();
         }
 
@@ -138,12 +155,18 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isPlaying = false;
-        Time.timeScale = 0f; // Pausar juego
+        Time.timeScale = 0f;
 
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
+
+        // Mostrar puntaje final
+        if (finalScoreText != null && scoreManager != null)
+        {
+            finalScoreText.text = $"PUNTAJE FINAL\n{scoreManager.score:D6}";
+        }
 
         // DETENER SPAWNER
         if (noteSpawner != null)
@@ -161,7 +184,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        PlayerPrefs.SetInt("IsRestarting", 1); // Marca que estamos reiniciando
+        PlayerPrefs.SetInt("IsRestarting", 1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -169,5 +192,42 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Saliendo del juego...");
         Application.Quit();
+    }
+
+    // NUEVO: Métodos de actualización de UI
+    public void UpdateScore(int score)
+    {
+        if (scoreText != null)
+            scoreText.text = $"PUNTAJE\n{score:D6}";
+    }
+
+    public void UpdateCombo(int combo)
+    {
+        if (comboText != null)
+            comboText.text = $"COMBO\nx{combo}";
+    }
+
+    public void UpdateHealth(int health)
+    {
+        if (healthBar != null)
+            healthBar.UpdateHealth(health);
+    }
+
+    // NUEVO: Método para limpiar notas
+    private void CleanupNotes()
+    {
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+        int notasDestruidas = 0;
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj != null && (obj.name.Contains("Note") || obj.GetComponent<Note>() != null))
+            {
+                Destroy(obj);
+                notasDestruidas++;
+            }
+        }
+
+        Debug.Log($"{notasDestruidas} notas destruidas");
     }
 }
