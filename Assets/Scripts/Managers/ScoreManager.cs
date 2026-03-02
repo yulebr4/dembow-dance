@@ -89,7 +89,50 @@ public class ScoreManager : MonoBehaviour
         UpdateUI();
 
         Debug.Log($"Score: {score}, Combo: {combo}, Judgement: {judgement}");
+
+        DynamicBackground dynamicBG = FindObjectOfType<DynamicBackground>();
+        if (dynamicBG != null)
+        {
+            // Efectos especiales según el judgement
+            switch (judgement)
+            {
+                case "Perfect":
+                    // Cada 5 Perfects seguidos, efecto especial
+                    if (combo % 5 == 0 && combo > 0)
+                    {
+                        Debug.Log($"¡PERFECT x{combo}! Efecto especial!");
+                        // Aquí puedes activar un efecto de partículas o destello
+                        // Por ejemplo: dynamicBG.TriggerPerfectStreak(combo);
+                    }
+                    break;
+
+                case "Good":
+                    // Efecto más sutil para Good
+                    if (combo % 10 == 0 && combo > 0)
+                    {
+                        Debug.Log($"Good streak: {combo}");
+                    }
+                    break;
+
+                case "Miss":
+                    // Efecto cuando se pierde el combo
+                    if (combo > 10) // Solo si teníamos un combo alto
+                    {
+                        Debug.Log($"¡Combo de {combo} roto! :(");
+                        // Efecto de "tristeza" en el fondo
+                    }
+                    break;
+            }
+
+            // Efectos por alcanzar ciertos umbrales de puntuación
+            if (score >= 1000 && score < 1010) // Justo al llegar a 1000
+            {
+                Debug.Log("¡Alcanzaste 1000 puntos!");
+                // Efecto especial por hito de puntuación
+            }
+        }
     }
+
 
     // NUEVO: Método para añadir score directamente con puntos (por si lo necesitas)
     public void AddScore(int basePoints)
@@ -116,12 +159,26 @@ public class ScoreManager : MonoBehaviour
     // NUEVO: Resetear combo
     public void ResetCombo()
     {
+        // Guardar el combo antes de resetearlo para efectos
+        int oldCombo = combo;
+
         if (combo > maxCombo)
             maxCombo = combo;
 
         combo = 0;
         UpdateUI();
         Debug.Log("Combo reseteado");
+
+        // Efecto cuando se pierde un combo alto
+        if (oldCombo >= 20)
+        {
+            DynamicBackground dynamicBG = FindObjectOfType<DynamicBackground>();
+            if (dynamicBG != null)
+            {
+                Debug.Log($"¡Se perdió un combo de {oldCombo}! Activando efecto de penalización");
+                // Aquí podrías hacer que el fondo se oscurezca o algo similar
+            }
+        }
     }
 
     // NUEVO: Recibir daño
