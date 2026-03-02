@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public NoteSpawner noteSpawner;
     public InputManager inputManager;
     public ScoreManager scoreManager;
+    public GameObject GameplayBackground;
+    public GameObject HitZonesContainer;
 
     [Header("UI Pixelada - NUEVO")]
     [SerializeField] private TextMeshProUGUI scoreText;
@@ -93,12 +95,22 @@ public class GameManager : MonoBehaviour
             PauseManager.Instance.HidePausePanel();
         }
 
+        // AGREGAR ESTO - Desactivar el fondo del juego
+        if (GameplayBackground != null)
+            GameplayBackground.SetActive(false);
+
+        if (HitZonesContainer != null)
+            HitZonesContainer.SetActive(false);
+
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(true);
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
+
+        // RESETEAR FONDO DINÁMICO
+        ResetDynamicBackground();
 
         // DETENER SPAWNER
         if (noteSpawner != null)
@@ -122,12 +134,22 @@ public class GameManager : MonoBehaviour
     {
         isPlaying = true;
 
+        // AGREGAR ESTO - Activar el fondo del juego
+        if (GameplayBackground != null)
+            GameplayBackground.SetActive(true);
+
+        if (HitZonesContainer != null)
+            HitZonesContainer.SetActive(true);
+
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(false);
         if (gameplayPanel != null)
             gameplayPanel.SetActive(true);
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
+
+        // RESETEAR FONDO DINAMICO
+        ResetDynamicBackground();
 
         if (scoreManager != null)
         {
@@ -156,6 +178,10 @@ public class GameManager : MonoBehaviour
     {
         isPlaying = false;
         Time.timeScale = 0f;
+
+        // AGREGAR ESTO - Desactivar fondo cuando hay game over
+        if (GameplayBackground != null)
+            GameplayBackground.SetActive(false);
 
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
@@ -229,5 +255,14 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log($"{notasDestruidas} notas destruidas");
+    }
+    // Nueva función para reiniciar el fondo dinámico
+    private void ResetDynamicBackground()
+    {
+        DynamicBackground dynamicBG = FindObjectOfType<DynamicBackground>();
+        if (dynamicBG != null)
+        {
+            dynamicBG.ResetBackground();
+        }
     }
 }

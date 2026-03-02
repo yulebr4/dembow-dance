@@ -3077,6 +3077,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1436782824}
   - component: {fileID: 1436782823}
+  - component: {fileID: 1436782825}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -3125,12 +3126,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -100
-  m_Sprite: {fileID: 21300000, guid: e58cadf5f734f884092e6145d6758993, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8d1cfa7ac03316145a530a053e40e091, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 30, y: 16.875}
+  m_Size: {x: 15.36, y: 10.24}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -3145,12 +3146,45 @@ Transform:
   m_GameObject: {fileID: 1436782822}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -952, y: -525, z: 0}
-  m_LocalScale: {x: 1.125, y: 1.125, z: 0.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 766679796}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1436782825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436782822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78500360fb16d9b43bf67039d489ff53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundSprite: {fileID: 1436782823}
+  gameManager: {fileID: 1722010091}
+  scoreManager: {fileID: 2110837530}
+  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  mediumScoreColor: {r: 1, g: 0.8, b: 0.3, a: 1}
+  highScoreColor: {r: 1, g: 0.5, b: 0, a: 1}
+  maxComboColor: {r: 1, g: 0.2, b: 0.8, a: 1}
+  backgroundParticles: {fileID: 0}
+  comboBurstParticles: {fileID: 0}
+  pulseSpeed: 2
+  pulseIntensity: 0.15
+  maxRotationAngle: 5
+  rotationSpeed: 1
+  scoreThreshold1: 1000
+  scoreThreshold2: 2500
+  scoreThreshold3: 5000
+  comboThreshold: 30
+  enableColorShift: 1
+  enablePulse: 1
+  enableRotation: 1
+  enableParticles: 1
 --- !u!1 &1562282605
 GameObject:
   m_ObjectHideFlags: 0
