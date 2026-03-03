@@ -85,6 +85,9 @@ public class GameManager : MonoBehaviour
 
     public void ShowMainMenu()
     {
+        // Detener música
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.StopMusic();
         isPlaying = false;
         Time.timeScale = 1f;
 
@@ -172,11 +175,18 @@ public class GameManager : MonoBehaviour
 
         if (inputManager != null)
             inputManager.enabled = true;
+
+        // Iniciar música
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.PlayCurrentSong();
     }
 
     public void GameOver()
     {
         isPlaying = false;
+        // Detener música
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.StopMusic();
         Time.timeScale = 0f;
 
         // AGREGAR ESTO - Desactivar fondo cuando hay game over

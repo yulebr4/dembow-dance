@@ -11,23 +11,18 @@ public class PauseManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     private void Update()
     {
-        // Detectar tecla ESC
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameManager.Instance != null && GameManager.Instance.isPlaying)
             {
-                if (isPaused)
-                    ResumeGame();
-                else
-                    PauseGame();
+                if (isPaused) ResumeGame();
+                else PauseGame();
             }
         }
     }
@@ -35,10 +30,13 @@ public class PauseManager : MonoBehaviour
     public void PauseGame()
     {
         isPaused = true;
-        Time.timeScale = 0f; // Pausa el juego
-
+        Time.timeScale = 0f;
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(true);
+
+        // Pausar música
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.PauseMusic();
 
         Debug.Log("Juego pausado");
     }
@@ -46,36 +44,36 @@ public class PauseManager : MonoBehaviour
     public void ResumeGame()
     {
         isPaused = false;
-        Time.timeScale = 1f; // Reactiva el juego
-
+        Time.timeScale = 1f;
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(false);
 
+        // Reanudar música
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.ResumeMusic();
+
         Debug.Log("Juego reanudado");
     }
+
     public void GoToMenuFromPause()
     {
         isPaused = false;
         Time.timeScale = 1f;
-
-        // Desactivar panel de pausa
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(false);
 
-        // Ir al menu
+        // Detener música al volver al menú
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.StopMusic();
+
         if (GameManager.Instance != null)
             GameManager.Instance.ShowMainMenu();
-
-        Debug.Log("Volviendo al menú principal desde pausa");
     }
 
-    // Método helper para desactivar panel desde fuera
     public void HidePausePanel()
     {
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(false);
-
         isPaused = false;
     }
 }
-
