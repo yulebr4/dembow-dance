@@ -108,6 +108,13 @@ public class MusicManager : MonoBehaviour
             songInfoPanel.SetActive(false);
     }
 
+    public void SetSongIndex(int index)
+    {
+        currentSongIndex = index;
+        UpdateSongInfo();
+    }
+
     public AudioClip GetCurrentSong() => songs[currentSongIndex];
     public int GetCurrentIndex() => currentSongIndex;
 }
+
