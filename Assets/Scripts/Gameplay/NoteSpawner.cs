@@ -33,54 +33,34 @@ public class NoteSpawner : MonoBehaviour
     {
         Transform[] foundZones = new Transform[4];
 
-        // Coordenadas exactas de los HitZones
-        float[] expectedX = { -1f, -0.4f, 0.57f, 1.5f };
-
-        // Buscar todos los objetos con componente SpriteRenderer (las flechas)
-        SpriteRenderer[] allSprites = FindObjectsOfType<SpriteRenderer>();
-
-        foreach (SpriteRenderer sr in allSprites)
+        // Buscar directamente por nombre en la jerarquía
+        for (int i = 0; i < 4; i++)
         {
-            // Buscar por nombre o por posición
-            if (sr.gameObject.name.Contains("HitZone"))
+            // Buscar Lane_i/HitZone
+            GameObject lane = GameObject.Find($"Lane_{i}");
+            if (lane != null)
             {
-                float posX = sr.transform.position.x;
-
-                // Determinar qué lane es según su X
-                for (int i = 0; i < 4; i++)
+                Transform hitZone = lane.transform.Find("HitZone");
+                if (hitZone != null)
                 {
-                    if (Mathf.Abs(posX - expectedX[i]) < 0.1f) // Tolerancia de 0.1
-                    {
-                        foundZones[i] = sr.transform;
-                        Debug.Log($"HitZone Lane {i} encontrado en X = {posX}");
-                        break;
-                    }
+                    foundZones[i] = hitZone;
+                    Debug.Log($"HitZone Lane {i} encontrado en X = {hitZone.position.x}");
                 }
             }
         }
 
-        // Verificar si encontramos todos
         int count = 0;
         for (int i = 0; i < 4; i++)
-        {
-            if (foundZones[i] != null)
-                count++;
-        }
+            if (foundZones[i] != null) count++;
 
         if (count == 4)
         {
             lanePositions = foundZones;
             Debug.Log("¡Todos los HitZones encontrados automáticamente!");
-
-            // Mostrar las X asignadas
-            for (int i = 0; i < 4; i++)
-            {
-                Debug.Log($"Lane {i} asignado con X = {lanePositions[i].position.x}");
-            }
         }
         else
         {
-            Debug.LogWarning($"Solo se encontraron {count} HitZones. Asigna manualmente en el Inspector.");
+            Debug.LogWarning($"Solo se encontraron {count} HitZones.");
         }
     }
 
@@ -120,7 +100,7 @@ public class NoteSpawner : MonoBehaviour
     public void SpawnNote(int laneIndex)
     {
         // Array con las X de los HitZones
-        float[] laneX = { -1f, -0.4f, 0.57f, 1.5f };
+        float[] laneX = { -4f, -1.5f, 1.5f, 4.2f };
 
         Vector3 spawnPos = new Vector3(
             laneX[laneIndex],
