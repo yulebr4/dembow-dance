@@ -20,6 +20,11 @@ public class OptionsManager : MonoBehaviour
     public TextMeshProUGUI trackText;     // TrackText (PISTA 1/4)
     public Image[] dots;                  // Los 4 cuadritos
 
+    [Header("Glow Borders")]
+    public GlowBorder glowEasy;
+    public GlowBorder glowNormal;
+    public GlowBorder glowHard;
+
     [Header("Song Names")]
     public string[] songNames = {
         "PRENDE",
@@ -32,7 +37,7 @@ public class OptionsManager : MonoBehaviour
     private int currentDifficulty;
     private int currentSongIndex;
 
-    private Color dotActive = new Color(0f, 1f, 0.8f);    // #00FFCC
+    private Color dotActive = new Color(0.81f, 0.55f, 0.96f); // #CF8DF6
     private Color dotInactive = new Color(0.1f, 0.1f, 0.16f); // #1A1A2A
     private Color selectedColor = new Color(0f, 1f, 0.5f);
     private Color unselectedColor = new Color(0.2f, 0.2f, 0.2f);
@@ -150,14 +155,8 @@ public class OptionsManager : MonoBehaviour
 
     private void UpdateDifficultyButtons()
     {
-        if (easyButton != null)
-            easyButton.GetComponent<Image>().color =
-                currentDifficulty == 0 ? selectedColor : unselectedColor;
-        if (normalButton != null)
-            normalButton.GetComponent<Image>().color =
-                currentDifficulty == 1 ? selectedColor : unselectedColor;
-        if (hardButton != null)
-            hardButton.GetComponent<Image>().color =
-                currentDifficulty == 2 ? selectedColor : unselectedColor;
+        if (glowEasy != null) glowEasy.SetActive(currentDifficulty == 0);
+        if (glowNormal != null) glowNormal.SetActive(currentDifficulty == 1);
+        if (glowHard != null) glowHard.SetActive(currentDifficulty == 2);
     }
 }
