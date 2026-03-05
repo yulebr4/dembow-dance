@@ -122,8 +122,15 @@ public class OptionsManager : MonoBehaviour
 
     public void OpenLeaderboard()
     {
-        if (leaderboardPanel != null)
-            leaderboardPanel.SetActive(true);
+        Debug.Log("Abriendo leaderboard, cerrando opciones");
+
+        // Cerrar opciones primero
+        if (optionsPanel != null)
+            optionsPanel.SetActive(false);
+
+        // Abrir tabla
+        if (LeaderboardManager.Instance != null)
+            LeaderboardManager.Instance.OpenLeaderboard();
     }
 
     public float GetNoteSpeed()

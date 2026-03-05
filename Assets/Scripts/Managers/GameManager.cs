@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public GameObject GameplayBackground;
     public GameObject HitZonesContainer;
 
-    [Header("UI Pixelada - NUEVO")]
+    [Header("UI Pixelada")]
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI comboText;
     [SerializeField] private PixelHealthBar healthBar;
@@ -29,55 +29,38 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     private void Start()
     {
-        // Verificar si estamos reiniciando el juego
         int isRestarting = PlayerPrefs.GetInt("IsRestarting", 0);
 
         if (isRestarting == 1)
         {
-            // Limpiar la marca
             PlayerPrefs.SetInt("IsRestarting", 0);
-
-            // Iniciar el juego directamente
-            StartGame();
+            ShowMainMenu();
+            if (LeaderboardManager.Instance != null)
+                LeaderboardManager.Instance.ShowEnterNameBeforeGame();
         }
         else
         {
-            // Mostrar menú principal normalmente
             ShowMainMenu();
         }
 
-        // Inicializar UI
         InitializeUI();
     }
 
-    // NUEVO: Inicializar la UI
     private void InitializeUI()
     {
-        // Configurar textos iniciales
         UpdateScore(0);
         UpdateCombo(0);
 
         if (scoreManager != null)
-        {
             UpdateHealth(scoreManager.maxHealth);
-        }
         else
-        {
             UpdateHealth(100);
-        }
 
         if (finalScoreText != null)
             finalScoreText.text = "PUNTAJE FINAL\n000000";
@@ -85,23 +68,17 @@ public class GameManager : MonoBehaviour
 
     public void ShowMainMenu()
     {
-        // Detener música
         if (MusicManager.Instance != null)
             MusicManager.Instance.StopMusic();
+
         isPlaying = false;
         Time.timeScale = 1f;
 
-        Debug.Log("Mostrando menú principal...");
-
         if (PauseManager.Instance != null)
-        {
             PauseManager.Instance.HidePausePanel();
-        }
 
-        // AGREGAR ESTO - Desactivar el fondo del juego
         if (GameplayBackground != null)
             GameplayBackground.SetActive(false);
-
         if (HitZonesContainer != null)
             HitZonesContainer.SetActive(false);
 
@@ -112,35 +89,38 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
-        // RESETEAR FONDO DINÁMICO
         ResetDynamicBackground();
 
-        // DETENER SPAWNER
         if (noteSpawner != null)
         {
             noteSpawner.StopSpawning();
             noteSpawner.enabled = false;
-            Debug.Log("Spawner detenido");
         }
 
         if (inputManager != null)
             inputManager.enabled = false;
 
-        // LIMPIAR NOTAS
         CleanupNotes();
-
-        // Resetear UI
         InitializeUI();
     }
 
+    // Llamado desde el boton JUGAR
+    public void OnPlayButtonPressed()
+    {
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(false);
+
+        if (LeaderboardManager.Instance != null)
+            LeaderboardManager.Instance.ShowEnterNameBeforeGame();
+    }
+
+    // Llamado desde LeaderboardManager al confirmar nombre
     public void StartGame()
     {
         isPlaying = true;
 
-        // AGREGAR ESTO - Activar el fondo del juego
         if (GameplayBackground != null)
             GameplayBackground.SetActive(true);
-
         if (HitZonesContainer != null)
             HitZonesContainer.SetActive(true);
 
@@ -151,7 +131,6 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
-        // RESETEAR FONDO DINAMICO
         ResetDynamicBackground();
 
         if (scoreManager != null)
@@ -159,8 +138,6 @@ public class GameManager : MonoBehaviour
             scoreManager.score = 0;
             scoreManager.combo = 0;
             scoreManager.health = scoreManager.maxHealth;
-
-            // Actualizar UI con valores del ScoreManager
             UpdateScore(0);
             UpdateCombo(0);
             UpdateHealth(scoreManager.maxHealth);
@@ -176,7 +153,6 @@ public class GameManager : MonoBehaviour
         if (inputManager != null)
             inputManager.enabled = true;
 
-        // Iniciar música
         if (MusicManager.Instance != null)
             MusicManager.Instance.PlayCurrentSong();
     }
@@ -184,12 +160,12 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isPlaying = false;
-        // Detener música
+
         if (MusicManager.Instance != null)
             MusicManager.Instance.StopMusic();
+
         Time.timeScale = 0f;
 
-        // AGREGAR ESTO - Desactivar fondo cuando hay game over
         if (GameplayBackground != null)
             GameplayBackground.SetActive(false);
 
@@ -198,13 +174,21 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
-        // Mostrar puntaje final
         if (finalScoreText != null && scoreManager != null)
-        {
             finalScoreText.text = $"PUNTAJE FINAL\n{scoreManager.score:D6}";
+
+        // Guardar puntaje automaticamente con nombre ya guardado
+        if (LeaderboardManager.Instance != null && scoreManager != null)
+        {
+            string diff = PlayerPrefs.GetInt("Difficulty", 1) switch
+            {
+                0 => "FACIL",
+                2 => "DIFICIL",
+                _ => "NORMAL"
+            };
+            LeaderboardManager.Instance.SaveScoreAuto(scoreManager.score, diff);
         }
 
-        // DETENER SPAWNER
         if (noteSpawner != null)
         {
             noteSpawner.StopSpawning();
@@ -226,11 +210,9 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("Saliendo del juego...");
         Application.Quit();
     }
 
-    // NUEVO: Métodos de actualización de UI
     public void UpdateScore(int score)
     {
         if (scoreText != null)
@@ -249,7 +231,6 @@ public class GameManager : MonoBehaviour
             healthBar.UpdateHealth(health);
     }
 
-    // NUEVO: Método para limpiar notas
     private void CleanupNotes()
     {
         GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
@@ -263,16 +244,13 @@ public class GameManager : MonoBehaviour
                 notasDestruidas++;
             }
         }
-
         Debug.Log($"{notasDestruidas} notas destruidas");
     }
-    // Nueva función para reiniciar el fondo dinámico
+
     private void ResetDynamicBackground()
     {
         DynamicBackground dynamicBG = FindObjectOfType<DynamicBackground>();
         if (dynamicBG != null)
-        {
             dynamicBG.ResetBackground();
-        }
     }
 }
