@@ -32,4 +32,12 @@ desktop.ini
 
 # Archivos de backup
 *.bak
-*.tmp
+*.tmp"Assets/Scripts/Fondo/Background_game_over 1.png" 
+"Assets/Scripts/Fondo/panel_opciones 1.png" 
+
+
+# Archivos antiguos de fondo
+Assets/Sprites/Fondo/Background_game_over 1.png
+Assets/Sprites/Fondo/Background_game_over 1.png.meta
+Assets/Sprites/Fondo/panel_opciones 1.png
+Assets/Sprites/Fondo/panel_opciones 1.png.meta 
