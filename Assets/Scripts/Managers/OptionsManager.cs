@@ -166,4 +166,17 @@ public class OptionsManager : MonoBehaviour
         if (glowNormal != null) glowNormal.SetActive(currentDifficulty == 1);
         if (glowHard != null) glowHard.SetActive(currentDifficulty == 2);
     }
+
+    public void SalirDelJuego()
+    {
+        Debug.Log("Saliendo del juego...");
+
+        // Si estás ejecutando el juego desde el editor de Unity
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // Si el juego ya está compilado (.exe o .apk)
+        Application.Quit();
+#endif
+    }
 }
