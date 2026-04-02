@@ -33,6 +33,8 @@ public class PixelHealthBar : MonoBehaviour
     private float targetFillAmount = 1f;
     private bool isLowHealth = false;
     private Vector3 originalBarPosition;
+    private bool damageFlashTriggered = false;
+
 
     void Start()
     {
@@ -82,8 +84,6 @@ public class PixelHealthBar : MonoBehaviour
         {
             currentFillAmount = Mathf.Lerp(currentFillAmount, targetFillAmount, Time.deltaTime * animationSpeed);
             healthBarFill.fillAmount = currentFillAmount;
-
-            // Actualizar sprites según el nivel de vida
             UpdateHealthAppearance(currentFillAmount);
         }
 
@@ -91,40 +91,50 @@ public class PixelHealthBar : MonoBehaviour
         if (GameObject.FindObjectOfType<ScoreManager>() != null)
         {
             ScoreManager sm = GameObject.FindObjectOfType<ScoreManager>();
-            int currentHealth = (int)typeof(ScoreManager).GetField("health")?.GetValue(sm);
-            if (currentHealth > 0)
-            {
-                UpdateHealth(currentHealth);
-            }
+            int health = (int)typeof(ScoreManager).GetField("health")?.GetValue(sm);
+            if (health > 0)
+                UpdateHealth(health);
         }
     }
 
-    // Método publico para actualizar la vida
     public void UpdateHealth(int currentHealth)
     {
         if (healthBarFill == null) return;
 
-        // Calcular porcentaje
         float healthPercent = (float)currentHealth / maxHealth;
-        targetFillAmount = Mathf.Clamp01(healthPercent);
+        float newTarget = Mathf.Clamp01(healthPercent);
 
-        // Si recibio daño, hacer shake
-        if (targetFillAmount < currentFillAmount)
+        // Solo disparar flash si realmente bajó la vida
+        if (newTarget < targetFillAmount && !damageFlashTriggered)
         {
+            damageFlashTriggered = true;
             OnDamageReceived();
+            Invoke(nameof(ResetDamageFlag), 0.5f);
         }
+
+        targetFillAmount = newTarget;
+    }
+
+    private void ResetDamageFlag()
+    {
+        damageFlashTriggered = false;
     }
 
     // Metodo para cuando recibe daño
     public void OnDamageReceived()
     {
-        // Efecto de shake
+        // Efecto de shake (ya tienes esto)
         if (barContainer != null)
             StartCoroutine(ShakeBar());
 
-        // Reproducir sonido de daño
+        // Reproducir sonido de daño (ya tienes esto)
         if (audioSource != null && damageSound != null)
             audioSource.PlayOneShot(damageSound);
+
+        // NUEVO: Flash en el fondo
+        DynamicBackground dynBG = FindObjectOfType<DynamicBackground>();
+        if (dynBG != null)
+            dynBG.TriggerDamageFlash();
     }
 
     // Efecto de shake

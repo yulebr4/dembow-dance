@@ -13,10 +13,12 @@ public class FloatAnimation : MonoBehaviour
     private Vector3 startPos;
     private UnityEngine.UI.Image panelImage;
     private Color baseColor;
+    private RectTransform rectTransform;
 
     private void Start()
     {
-        startPos = transform.localPosition;
+        rectTransform = GetComponent<RectTransform>();
+        startPos = rectTransform.anchoredPosition; // cambia esto
         panelImage = GetComponent<UnityEngine.UI.Image>();
         if (panelImage != null)
             baseColor = panelImage.color;
@@ -24,11 +26,9 @@ public class FloatAnimation : MonoBehaviour
 
     private void Update()
     {
-        // Animación flotante
         float newY = startPos.y + Mathf.Sin(Time.time * speed) * amplitude;
-        transform.localPosition = new Vector3(startPos.x, newY, startPos.z);
+        rectTransform.anchoredPosition = new Vector2(startPos.x, newY); // y esto
 
-        // Efecto glow pulsante en el borde
         if (enableGlow && panelImage != null)
         {
             float glow = (Mathf.Sin(Time.time * glowSpeed) + 1f) / 2f;

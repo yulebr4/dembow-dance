@@ -61,6 +61,9 @@ public class ScoreManager : MonoBehaviour
                 break;
         }
 
+        if (JudgmentDisplay.Instance != null)
+            JudgmentDisplay.Instance.ShowJudgment(judgement);
+
         // APLICAR MULTIPLICADOR DE COMBO (versión mejorada)
         if (combo > 1)
         {
