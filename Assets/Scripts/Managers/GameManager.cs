@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameplayPanel;
     public GameObject gameOverPanel;
     public GameObject victoryPanel;
+    public GameObject backgroundParticles;
 
     [Header("Scripts de Juego")]
     public NoteSpawner noteSpawner;
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI finalScoreText;
     [SerializeField] private TextMeshProUGUI bestScoreGameOverText;
     [SerializeField] private TextMeshProUGUI victoryScoreText;
+    [SerializeField] private TextMeshProUGUI victoryBestScoreText;
 
     [Header("Estado del Juego")]
     public bool isPlaying = false;
@@ -79,6 +81,9 @@ public class GameManager : MonoBehaviour
 
         isPlaying = false;
         Time.timeScale = 1f;
+
+        SetParticles(false);
+
 
         if (PauseManager.Instance != null)
             PauseManager.Instance.HidePausePanel();
@@ -146,6 +151,8 @@ public class GameManager : MonoBehaviour
         if (victoryPanel != null) 
             victoryPanel.SetActive(false);
 
+        SetParticles(false);
+
         ResetDynamicBackground();
 
         if (scoreManager != null)
@@ -172,6 +179,8 @@ public class GameManager : MonoBehaviour
             MusicManager.Instance.PlayCurrentSong();
     }
 
+
+
     public void WinGame()
     {
         isPlaying = false;
@@ -181,10 +190,18 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0f;
 
-        // Ocultar gameplay pero NO encender el background principal, 
-        // el panel de victoria es opaco y lo tapa.
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
+
+        // --- NUEVA SECCIÓN DE PUNTAJE ---
+        // Actualizamos los textos antes de mostrar el panel
+        if (victoryScoreText != null && scoreManager != null)
+            victoryScoreText.text = $"{scoreManager.score:D6}";
+
+        int bestScore = PlayerPrefs.GetInt("Score_0", 0);
+        if (victoryBestScoreText != null)
+            victoryBestScoreText.text = $"{bestScore:D6}";
+        // --------------------------------
 
         if (victoryPanel != null)
             victoryPanel.SetActive(true);
@@ -216,6 +233,8 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
+        SetParticles(true);
+
         if (finalScoreText != null && scoreManager != null)
             finalScoreText.text = $"{scoreManager.score:D6}";
 
@@ -239,6 +258,7 @@ public class GameManager : MonoBehaviour
             inputManager.enabled = false;
 
         Debug.Log("GAME OVER!");
+        Debug.Log("Particles ON GameOver");
     }
 
     private string GetCurrentDifficultyName()
@@ -313,5 +333,11 @@ public class GameManager : MonoBehaviour
         DynamicBackground dynamicBG = FindObjectOfType<DynamicBackground>();
         if (dynamicBG != null)
             dynamicBG.ResetBackground();
+    }
+
+    public void SetParticles(bool state)
+    {
+        if (backgroundParticles != null)
+            backgroundParticles.SetActive(state);
     }
 }

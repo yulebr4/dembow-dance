@@ -26,12 +26,14 @@ public class FloatAnimation : MonoBehaviour
 
     private void Update()
     {
-        float newY = startPos.y + Mathf.Sin(Time.time * speed) * amplitude;
-        rectTransform.anchoredPosition = new Vector2(startPos.x, newY); // y esto
+        // Cambiamos Time.time por Time.unscaledTime
+        float newY = startPos.y + Mathf.Sin(Time.unscaledTime * speed) * amplitude;
+        rectTransform.anchoredPosition = new Vector2(startPos.x, newY);
 
         if (enableGlow && panelImage != null)
         {
-            float glow = (Mathf.Sin(Time.time * glowSpeed) + 1f) / 2f;
+            // También aquí para el brillo
+            float glow = (Mathf.Sin(Time.unscaledTime * glowSpeed) + 1f) / 2f;
             panelImage.color = Color.Lerp(baseColor, baseColor * 1.3f, glow);
         }
     }

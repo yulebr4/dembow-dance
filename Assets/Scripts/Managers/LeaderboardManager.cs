@@ -51,6 +51,9 @@ public class LeaderboardManager : MonoBehaviour
         if (enterNamePanel != null)
             enterNamePanel.SetActive(true);
 
+        if (GameManager.Instance != null)
+            GameManager.Instance.SetParticles(true);
+
         // Pre-cargar nombre anterior si existe
         if (nameInputField != null)
         {
@@ -75,6 +78,9 @@ public class LeaderboardManager : MonoBehaviour
         // Cerrar panel de nombre
         if (enterNamePanel != null)
             enterNamePanel.SetActive(false);
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.SetParticles(false);
 
         // Iniciar juego
         if (GameManager.Instance != null)
@@ -139,6 +145,7 @@ public class LeaderboardManager : MonoBehaviour
         if (leaderboardPanel != null)
             leaderboardPanel.SetActive(true);
 
+
         LoadLeaderboard();
     }
 
@@ -163,7 +170,7 @@ public class LeaderboardManager : MonoBehaviour
 
             if (texts.Length >= 3)
             {
-                texts[0].text = i == 0 ? "🥇" : i == 1 ? "🥈" : i == 2 ? "🥉" : $"#{i + 1}";
+                texts[0].text = i == 0 ? "#1" : i == 1 ? "#2" : i == 2 ? "#3" : $"#{i + 1}";
                 texts[1].text = name;
                 texts[2].text = $"{score:D6}";
             }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -70,7 +70,11 @@ public class OptionsManager : MonoBehaviour
         UpdateSongUI();
 
         if (GameManager.Instance != null)
+        {
             GameManager.Instance.mainMenuPanel.SetActive(false);
+            GameManager.Instance.SetParticles(true); 
+        }
+
         if (optionsPanel != null)
             optionsPanel.SetActive(true);
     }
@@ -83,7 +87,10 @@ public class OptionsManager : MonoBehaviour
         if (optionsPanel != null)
             optionsPanel.SetActive(false);
         if (GameManager.Instance != null)
+        {
             GameManager.Instance.mainMenuPanel.SetActive(true);
+            GameManager.Instance.SetParticles(false); 
+        }
     }
 
     public void SaveOptions()
@@ -122,15 +129,18 @@ public class OptionsManager : MonoBehaviour
 
     public void OpenLeaderboard()
     {
-        Debug.Log("Abriendo leaderboard, cerrando opciones");
-
-        // Cerrar opciones primero
+        // 1. Cerramos el panel de opciones (aquí sí existe la variable)
         if (optionsPanel != null)
             optionsPanel.SetActive(false);
 
-        // Abrir tabla
+        // 2. Apagamos partículas
+        if (GameManager.Instance != null)
+            GameManager.Instance.SetParticles(false);
+
+        // 3. Llamamos a la tabla
         if (LeaderboardManager.Instance != null)
-            LeaderboardManager.Instance.OpenLeaderboard();
+            LeaderboardManager.Instance.leaderboardPanel.SetActive(true);
+        LeaderboardManager.Instance.LoadLeaderboard();
     }
 
     public float GetNoteSpeed()
@@ -171,11 +181,11 @@ public class OptionsManager : MonoBehaviour
     {
         Debug.Log("Saliendo del juego...");
 
-        // Si est�s ejecutando el juego desde el editor de Unity
+        // Si estás ejecutando el juego desde el editor de Unity
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-        // Si el juego ya est� compilado (.exe o .apk)
+        // Si el juego ya está compilado (.exe o .apk)
         Application.Quit();
 #endif
     }
