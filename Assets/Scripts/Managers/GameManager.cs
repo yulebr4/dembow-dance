@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject gameplayPanel;
     public GameObject gameOverPanel;
+    public GameObject victoryPanel;
 
     [Header("Scripts de Juego")]
     public NoteSpawner noteSpawner;
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI comboText;
     [SerializeField] private PixelHealthBar healthBar;
     [SerializeField] private TextMeshProUGUI finalScoreText;
+    [SerializeField] private TextMeshProUGUI bestScoreGameOverText;
+    [SerializeField] private TextMeshProUGUI victoryScoreText;
 
     [Header("Estado del Juego")]
     public bool isPlaying = false;
@@ -35,10 +38,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Revisar si venimos de un "REPETIR NIVEL"
         int isRestarting = PlayerPrefs.GetInt("IsRestarting", 0);
 
         if (isRestarting == 1)
         {
+            // Venimos de repetir: Ocultar bandera, mostrar menú y pedir nombre
             PlayerPrefs.SetInt("IsRestarting", 0);
             ShowMainMenu();
             if (LeaderboardManager.Instance != null)
@@ -46,6 +51,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // Inicio normal o volver desde victoria: Solo menú principal limpio
             ShowMainMenu();
         }
 
@@ -79,18 +85,26 @@ public class GameManager : MonoBehaviour
 
         if (GameplayBackground != null)
             GameplayBackground.SetActive(false);
+
         if (HitZonesContainer != null)
             HitZonesContainer.SetActive(false);
 
+        // Paneles
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(true);
+
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
+
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
+        if (victoryPanel != null)
+            victoryPanel.SetActive(false);
+
         ResetDynamicBackground();
 
+        // Parar sistemas
         if (noteSpawner != null)
         {
             noteSpawner.StopSpawning();
@@ -103,7 +117,6 @@ public class GameManager : MonoBehaviour
         CleanupNotes();
         InitializeUI();
     }
-
     // Llamado desde el boton JUGAR
     public void OnPlayButtonPressed()
     {
@@ -130,6 +143,8 @@ public class GameManager : MonoBehaviour
             gameplayPanel.SetActive(true);
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
+        if (victoryPanel != null) 
+            victoryPanel.SetActive(false);
 
         ResetDynamicBackground();
 
@@ -157,6 +172,33 @@ public class GameManager : MonoBehaviour
             MusicManager.Instance.PlayCurrentSong();
     }
 
+    public void WinGame()
+    {
+        isPlaying = false;
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.StopMusic();
+
+        Time.timeScale = 0f;
+
+        // Ocultar gameplay pero NO encender el background principal, 
+        // el panel de victoria es opaco y lo tapa.
+        if (gameplayPanel != null)
+            gameplayPanel.SetActive(false);
+
+        if (victoryPanel != null)
+            victoryPanel.SetActive(true);
+
+        // Guardar puntaje automáticamente al ganar
+        if (LeaderboardManager.Instance != null && scoreManager != null)
+        {
+            string diff = GetCurrentDifficultyName();
+            LeaderboardManager.Instance.SaveScoreAuto(scoreManager.score, diff);
+        }
+
+        Debug.Log("¡Nivel completado con éxito!");
+    }
+
     public void GameOver()
     {
         isPlaying = false;
@@ -175,17 +217,15 @@ public class GameManager : MonoBehaviour
             gameOverPanel.SetActive(true);
 
         if (finalScoreText != null && scoreManager != null)
-            finalScoreText.text = $"PUNTAJE FINAL\n{scoreManager.score:D6}";
+            finalScoreText.text = $"{scoreManager.score:D6}";
 
-        // Guardar puntaje automaticamente con nombre ya guardado
+        int bestScore = PlayerPrefs.GetInt("Score_0", 0);
+        if (bestScoreGameOverText != null)
+            bestScoreGameOverText.text = $"{bestScore:D6}";
+
         if (LeaderboardManager.Instance != null && scoreManager != null)
         {
-            string diff = PlayerPrefs.GetInt("Difficulty", 1) switch
-            {
-                0 => "FACIL",
-                2 => "DIFICIL",
-                _ => "NORMAL"
-            };
+            string diff = GetCurrentDifficultyName();
             LeaderboardManager.Instance.SaveScoreAuto(scoreManager.score, diff);
         }
 
@@ -201,12 +241,33 @@ public class GameManager : MonoBehaviour
         Debug.Log("GAME OVER!");
     }
 
+    private string GetCurrentDifficultyName()
+    {
+        return PlayerPrefs.GetInt("Difficulty", 1) switch
+        {
+            0 => "FACIL",
+            2 => "DIFICIL",
+            _ => "NORMAL"
+        };
+    }
+
     public void RestartGame()
     {
         Time.timeScale = 1f;
+        // SÍ activamos la bandera para que pida nombre al recargar
         PlayerPrefs.SetInt("IsRestarting", 1);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    // --- NUEVO: VOLVER AL MENÚ (Desde Paneles Finales) ---
+    public void VolverAlMenuDesdePanelFinal()
+    {
+        Time.timeScale = 1f;
+        // IMPORTANTE: Asegurar que la bandera de reiniciar esté en 0
+        PlayerPrefs.SetInt("IsRestarting", 0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
 
     public void QuitGame()
     {

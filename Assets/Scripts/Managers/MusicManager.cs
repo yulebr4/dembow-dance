@@ -39,13 +39,15 @@ public class MusicManager : MonoBehaviour
 
     private void Update()
     {
+        // 1. Actualizar barra de progreso mientras suena
         if (audioSource.isPlaying && audioSource.clip != null)
         {
             progressBarFill.fillAmount = audioSource.time / audioSource.clip.length;
         }
 
-        // Detectar cuando termina la canción
-        if (gameStarted && !audioSource.isPlaying && audioSource.clip != null && audioSource.time == 0)
+        // 2. DETECTAR VICTORIA (Cuando termina la canción)
+        // Si el juego inició, la música no está sonando y no es porque esté en pausa
+        if (gameStarted && !audioSource.isPlaying && audioSource.time == 0)
         {
             SongFinished();
         }
@@ -54,9 +56,13 @@ public class MusicManager : MonoBehaviour
     private void SongFinished()
     {
         gameStarted = false;
-        Debug.Log("¡Canción terminada! Fin del nivel");
+        Debug.Log("¡Canción terminada! Llamando a WinGame");
+
         if (GameManager.Instance != null)
-            GameManager.Instance.GameOver(); // Llama al GameOver cuando termina
+        {
+            // CAMBIO AQUÍ: Ahora llama a WinGame en lugar de GameOver
+            GameManager.Instance.WinGame();
+        }
     }
 
     private void UpdateSongInfo()
