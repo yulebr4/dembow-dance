@@ -193,6 +193,11 @@ public class GameManager : MonoBehaviour
         if (gameplayPanel != null)
             gameplayPanel.SetActive(false);
 
+        if (GameplayBackground != null)
+            GameplayBackground.SetActive(false);
+        if (HitZonesContainer != null)
+            HitZonesContainer.SetActive(false);
+
         // --- NUEVA SECCIÓN DE PUNTAJE ---
         // Actualizamos los textos antes de mostrar el panel
         if (victoryScoreText != null && scoreManager != null)
@@ -205,6 +210,9 @@ public class GameManager : MonoBehaviour
 
         if (victoryPanel != null)
             victoryPanel.SetActive(true);
+
+        SetParticles(true);
+
 
         // Guardar puntaje automáticamente al ganar
         if (LeaderboardManager.Instance != null && scoreManager != null)
@@ -339,5 +347,18 @@ public class GameManager : MonoBehaviour
     {
         if (backgroundParticles != null)
             backgroundParticles.SetActive(state);
+    }
+
+    public void ContinuarDesdeGameOver()
+    {
+        Time.timeScale = 1f;
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+
+        if (scoreManager != null)
+            scoreManager.ResetScoreManager();
+
+        StartGame();
     }
 }
