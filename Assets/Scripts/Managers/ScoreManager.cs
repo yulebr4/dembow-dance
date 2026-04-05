@@ -43,21 +43,29 @@ public class ScoreManager : MonoBehaviour
             case "Perfect":
                 basePoints = perfectPoints;
                 combo++;
+                if (ComboFireEffect.Instance != null)
+                    ComboFireEffect.Instance.OnPerfectHit(combo); // <--- Le pasamos el combo actual
                 break;
 
             case "Good":
                 basePoints = goodPoints;
                 combo++;
+                if (ComboFireEffect.Instance != null)
+                    ComboFireEffect.Instance.OnMissOrNonPerfect();
                 break;
 
             case "OK":
                 basePoints = okPoints;
                 combo++;
+                if (ComboFireEffect.Instance != null)
+                    ComboFireEffect.Instance.OnMissOrNonPerfect();
                 break;
 
             case "Miss":
                 breakCombo = true;
                 TakeDamage(10); // Usa el nuevo método TakeDamage
+                if (ComboFireEffect.Instance != null)
+                    ComboFireEffect.Instance.OnMissOrNonPerfect();
                 break;
         }
 

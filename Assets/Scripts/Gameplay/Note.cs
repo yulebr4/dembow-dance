@@ -22,7 +22,17 @@ public class Note : MonoBehaviour
         transform.position += Vector3.down * speed * Time.deltaTime;
 
         if (transform.position.y < -6f)
+        {
+            // Avisar Miss antes de destruirse
+            if (GameManager.Instance != null && GameManager.Instance.isPlaying)
+            {
+                ScoreManager sm = FindObjectOfType<ScoreManager>();
+                if (sm != null)
+                    sm.AddScore("Miss");
+            }
+
             Destroy(gameObject);
+        }
     }
 
     private void OnDrawGizmos()

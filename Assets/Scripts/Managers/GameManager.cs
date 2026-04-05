@@ -151,6 +151,9 @@ public class GameManager : MonoBehaviour
         if (victoryPanel != null) 
             victoryPanel.SetActive(false);
 
+        if (ComboFireEffect.Instance != null)
+            ComboFireEffect.Instance.ResetFire();
+
         SetParticles(false);
 
         ResetDynamicBackground();
@@ -187,6 +190,11 @@ public class GameManager : MonoBehaviour
 
         if (MusicManager.Instance != null)
             MusicManager.Instance.StopMusic();
+
+        if (ComboFireEffect.Instance != null)
+            ComboFireEffect.Instance.ResetFire();
+
+        CleanupNotes();
 
         Time.timeScale = 0f;
 
@@ -230,6 +238,12 @@ public class GameManager : MonoBehaviour
 
         if (MusicManager.Instance != null)
             MusicManager.Instance.StopMusic();
+
+      
+        if (ComboFireEffect.Instance != null)
+            ComboFireEffect.Instance.ResetFire();
+
+        CleanupNotes();
 
         Time.timeScale = 0f;
 
