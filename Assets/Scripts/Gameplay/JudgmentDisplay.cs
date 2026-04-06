@@ -53,6 +53,8 @@ public class JudgmentDisplay : MonoBehaviour
 
         if (sprite == null || displayImage == null) return;
 
+        this.gameObject.SetActive(true);
+
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 

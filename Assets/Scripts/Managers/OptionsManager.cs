@@ -24,6 +24,24 @@ public class OptionsManager : MonoBehaviour
     public GlowBorder glowEasy;
     public GlowBorder glowNormal;
     public GlowBorder glowHard;
+    public GlowBorder glowAuto;
+
+
+    [Header("Dificultad Automática")]
+    public float autoMinSpeed = 2f;   // Velocidad inicial
+    public float autoMaxSpeed = 14f;  // Velocidad máxima al final
+
+    [Header("Scenario UI")]
+    public UnityEngine.UI.Image scenarioPreviewImage;
+    public TMPro.TextMeshProUGUI scenarioNameText;
+
+    [Header("Scenario UI Multi-Slot")]
+    // Cambiamos 'scenarioPreviewImage' por un array de imágenes
+    public UnityEngine.UI.Image[] scenarioSlots;
+    public TMPro.TextMeshProUGUI[] scenarioSlotNames;
+    public Color selectedColor = Color.white;
+    public Color unselectedColor = new Color(0.2f, 0.2f, 0.2f, 1f); // Oscuro
+
 
     [Header("Song Names")]
     public string[] songNames = {
@@ -33,14 +51,13 @@ public class OptionsManager : MonoBehaviour
         "LO QUE PUEDA"
     };
 
-    private float[] difficultySpeeds = { 3f, 5f, 8f };
+    private float[] difficultySpeeds = { 3f, 5f, 12f, 5f };
     private int currentDifficulty;
     private int currentSongIndex;
 
     private Color dotActive = new Color(0.81f, 0.55f, 0.96f); // #CF8DF6
     private Color dotInactive = new Color(0.1f, 0.1f, 0.16f); // #1A1A2A
-    private Color selectedColor = new Color(0f, 1f, 0.5f);
-    private Color unselectedColor = new Color(0.2f, 0.2f, 0.2f);
+
 
     private void Awake()
     {
@@ -77,6 +94,8 @@ public class OptionsManager : MonoBehaviour
 
         if (optionsPanel != null)
             optionsPanel.SetActive(true);
+
+        UpdateScenarioUI();
     }
 
     public void CancelOptions()
@@ -106,6 +125,14 @@ public class OptionsManager : MonoBehaviour
             optionsPanel.SetActive(false);
         if (GameManager.Instance != null)
             GameManager.Instance.mainMenuPanel.SetActive(true);
+        if (GameManager.Instance != null)
+            GameManager.Instance.SetParticles(false);
+
+        if (ScenarioManager.Instance != null)
+        {
+            ScenarioManager.Instance.SaveScenario();
+            ScenarioManager.Instance.ApplyScenario();
+        }
     }
 
     public void SetDifficulty(int level)
@@ -146,9 +173,23 @@ public class OptionsManager : MonoBehaviour
     public float GetNoteSpeed()
     {
         int diff = PlayerPrefs.GetInt("Difficulty", 1);
+
+        if (diff == 3)
+            return GetAutoSpeed();
+
         return difficultySpeeds[diff];
     }
 
+    private float GetAutoSpeed()
+    {
+        if (MusicManager.Instance == null) return autoMinSpeed;
+
+        AudioSource audio = MusicManager.Instance.audioSource;
+        if (audio == null || audio.clip == null) return autoMinSpeed;
+
+        float progress = audio.time / audio.clip.length;
+        return Mathf.Lerp(autoMinSpeed, autoMaxSpeed, progress);
+    }
     private void UpdateSongUI()
     {
         // Actualizar nombre
@@ -175,6 +216,8 @@ public class OptionsManager : MonoBehaviour
         if (glowEasy != null) glowEasy.SetActive(currentDifficulty == 0);
         if (glowNormal != null) glowNormal.SetActive(currentDifficulty == 1);
         if (glowHard != null) glowHard.SetActive(currentDifficulty == 2);
+        if (glowAuto != null) glowAuto.SetActive(currentDifficulty == 3);
+
     }
 
     public void SalirDelJuego()
@@ -188,5 +231,59 @@ public class OptionsManager : MonoBehaviour
         // Si el juego ya está compilado (.exe o .apk)
         Application.Quit();
 #endif
+    }
+
+    public void NextScenario()
+    {
+        if (ScenarioManager.Instance == null) return;
+        int next = (ScenarioManager.Instance.GetCurrentIndex() + 1) % ScenarioManager.Instance.GetCount();
+        ScenarioManager.Instance.SetScenario(next);
+        UpdateScenarioUI();
+    }
+
+    public void PreviousScenario()
+    {
+        if (ScenarioManager.Instance == null) return;
+        int prev = ScenarioManager.Instance.GetCurrentIndex() - 1;
+        if (prev < 0) prev = ScenarioManager.Instance.GetCount() - 1;
+        ScenarioManager.Instance.SetScenario(prev);
+        UpdateScenarioUI();
+    }
+
+    // Esta es la función que hace la magia
+    private void UpdateScenarioUI()
+    {
+        if (ScenarioManager.Instance == null) return;
+
+        int currentIndex = ScenarioManager.Instance.GetCurrentIndex();
+        int totalSprites = ScenarioManager.Instance.GetCount();
+        int totalNames = ScenarioManager.Instance.scenarioNames.Length;
+
+        for (int i = 0; i < scenarioSlots.Length; i++)
+        {
+            if (scenarioSlots[i] == null) continue;
+
+            if (i < totalSprites)
+            {
+                // Ponemos el Sprite
+                scenarioSlots[i].sprite = ScenarioManager.Instance.scenarioSprites[i];
+
+                // Ponemos el Nombre en el texto correspondiente a ese slot
+                if (i < scenarioSlotNames.Length && scenarioSlotNames[i] != null && i < totalNames)
+                {
+                    scenarioSlotNames[i].text = ScenarioManager.Instance.scenarioNames[i];
+
+                    // OPCIONAL: Que el texto también se oscurezca si no está seleccionado
+                    scenarioSlotNames[i].color = (i == currentIndex) ? Color.white : new Color(0.5f, 0.5f, 0.5f);
+                }
+
+                scenarioSlots[i].gameObject.SetActive(true);
+                scenarioSlots[i].color = (i == currentIndex) ? selectedColor : unselectedColor;
+            }
+            else
+            {
+                scenarioSlots[i].gameObject.SetActive(false);
+            }
+        }
     }
 }

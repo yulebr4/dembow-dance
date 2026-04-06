@@ -289,6 +289,7 @@ public class GameManager : MonoBehaviour
         {
             0 => "FACIL",
             2 => "DIFICIL",
+            3 => "AUTOMATICA",
             _ => "NORMAL"
         };
     }

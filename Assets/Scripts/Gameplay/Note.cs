@@ -19,18 +19,23 @@ public class Note : MonoBehaviour
 
     private void Update()
     {
+        // Si es automática, actualizar velocidad cada frame
+        if (PlayerPrefs.GetInt("Difficulty", 1) == 3)
+        {
+            if (OptionsManager.Instance != null)
+                speed = OptionsManager.Instance.GetNoteSpeed();
+        }
+
         transform.position += Vector3.down * speed * Time.deltaTime;
 
         if (transform.position.y < -6f)
         {
-            // Avisar Miss antes de destruirse
             if (GameManager.Instance != null && GameManager.Instance.isPlaying)
             {
                 ScoreManager sm = FindObjectOfType<ScoreManager>();
                 if (sm != null)
                     sm.AddScore("Miss");
             }
-
             Destroy(gameObject);
         }
     }
