@@ -4114,7 +4114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &766679796
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6801,6 +6801,26 @@ MonoBehaviour:
   - CALLES DOMINICANAS
   - AZOTEA DOMINICANA
   gameplayBackgroundRenderer: {fileID: 123471355}
+  hitZones:
+  - {fileID: 146146248}
+  - {fileID: 1929723594}
+  - {fileID: 770824717}
+  - {fileID: 1101557009}
+  scenarioLaneX_0:
+  - -4.4
+  - -1.5
+  - 1.5
+  - 4.4
+  scenarioLaneX_1:
+  - -3.3
+  - -1.2
+  - 1.2
+  - 3.3
+  scenarioLaneX_2:
+  - -3
+  - -1
+  - 1
+  - 3
 --- !u!4 &1192992239
 Transform:
   m_ObjectHideFlags: 0
@@ -21197,7 +21217,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2025811870
 RectTransform:
   m_ObjectHideFlags: 0

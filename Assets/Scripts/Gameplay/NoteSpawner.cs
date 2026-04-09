@@ -99,14 +99,13 @@ public class NoteSpawner : MonoBehaviour
 
     public void SpawnNote(int laneIndex)
     {
-        // Array con las X de los HitZones
-        float[] laneX = { -4f, -1.5f, 1.5f, 4.2f };
+        // Usar posiciones del escenario actual si está disponible
+        float[] laneX = { -4f, -1.5f, 1.5f, 4.2f }; // Default
 
-        Vector3 spawnPos = new Vector3(
-            laneX[laneIndex],
-            spawnY,
-            0
-        );
+        if (ScenarioManager.Instance != null)
+            laneX = ScenarioManager.Instance.GetCurrentLanePositions();
+
+        Vector3 spawnPos = new Vector3(laneX[laneIndex], spawnY, 0);
 
         GameObject noteObj = Instantiate(notePrefab, spawnPos, Quaternion.identity);
 
