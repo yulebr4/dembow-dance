@@ -2,7 +2,7 @@
 **Rhythm game dominicano desarrollado en Unity 6** *Proyecto Final - ISW-414 Programación de Videojuegos*
 
 ## Información del Estudiante
-* **Nombre: Yulenny Bonilla
+* **Nombre:** Yulenny Bonilla
 * **Matrícula:** 2023-0769
 * **Universidad:** Universidad Central del Este (UCE)
 * **Profesor:** Ivan Zorrilla
@@ -28,7 +28,7 @@
 ## Screenshots
 ![Menú Principal](Screenshots/background_menu_principal.png)
 ![Opciones](Screenshots/panel_opciones.png)
-![Gameplay](Screenshots/background_calles_dominicanas.png)
+![Gameplay](Screenshots/background_dembow_night.png)
 ![Leaderboard](Screenshots/panel_tablaclasificacion.png)
 
 
