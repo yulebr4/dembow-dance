@@ -2,7 +2,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
@@ -19,7 +18,12 @@ public class MusicManager : MonoBehaviour
     public Image progressBarFill;
     public TextMeshProUGUI songNameText;
     public TextMeshProUGUI artistNameText;
-    public GameObject songInfoPanel; // Arrastra el SongInfoPanel aquí
+    public GameObject songInfoPanel;
+
+    [Header("Audios de Interfaz (Arcade)")]
+    public AudioClip menuLoop;
+    public AudioClip victorySound;
+    public AudioClip gameOverSound;
 
     private int currentSongIndex = 0;
     private bool gameStarted = false;
@@ -34,33 +38,71 @@ public class MusicManager : MonoBehaviour
     {
         currentSongIndex = PlayerPrefs.GetInt("SongIndex", 0);
         UpdateSongInfo();
-        HideSongPanel(); // Ocultar al inicio
+        HideSongPanel();
+
+        // OPCIONAL: Empezar la música del menú al abrir el juego
+        PlayMenuMusic();
     }
 
     private void Update()
     {
-        // 1. Actualizar barra de progreso mientras suena
-        if (audioSource.isPlaying && audioSource.clip != null)
+        if (audioSource.isPlaying && audioSource.clip != null && gameStarted)
         {
             progressBarFill.fillAmount = audioSource.time / audioSource.clip.length;
         }
 
-        // 2. DETECTAR VICTORIA (Cuando termina la canción)
-        // Si el juego inició, la música no está sonando y no es porque esté en pausa
         if (gameStarted && !audioSource.isPlaying && audioSource.time == 0)
         {
             SongFinished();
         }
     }
 
+    // --- MÉTODOS DE INTERFAZ (ARCADE) ---
+
+    public void PlayMenuMusic()
+    {
+        gameStarted = false;
+        if (audioSource.clip == menuLoop && audioSource.isPlaying) return;
+
+        audioSource.Stop();
+        audioSource.clip = menuLoop;
+        audioSource.loop = true;
+
+        // Solo bajamos el volumen aquí
+        audioSource.volume = 0.2f; // Ajusta este número (0.4f es el 40%) hasta que te guste
+
+        audioSource.Play();
+        HideSongPanel();
+    }
+
+    public void PlayVictorySound()
+    {
+        gameStarted = false;
+        audioSource.Stop();
+        audioSource.clip = victorySound;
+        audioSource.loop = false; // Solo una vez
+        audioSource.Play();
+        HideSongPanel();
+    }
+
+    public void PlayGameOverSound()
+    {
+        gameStarted = false;
+        audioSource.Stop();
+        audioSource.clip = gameOverSound;
+        audioSource.loop = false; // Solo una vez
+        audioSource.Play();
+        HideSongPanel();
+    }
+
+    // --- LÓGICA DE GAMEPLAY ---
+
     private void SongFinished()
     {
         gameStarted = false;
         Debug.Log("¡Canción terminada! Llamando a WinGame");
-
         if (GameManager.Instance != null)
         {
-            // CAMBIO AQUÍ: Ahora llama a WinGame en lugar de GameOver
             GameManager.Instance.WinGame();
         }
     }
@@ -78,10 +120,16 @@ public class MusicManager : MonoBehaviour
     public void PlayCurrentSong()
     {
         if (songs.Length == 0) return;
+        audioSource.Stop();
+
+        // Volvemos a subir el volumen para que el Dembow suene con toda la fuerza
+        audioSource.volume = 1.0f;
+
         audioSource.clip = songs[currentSongIndex];
+        audioSource.loop = false;
         audioSource.Play();
         gameStarted = true;
-        ShowSongPanel(); // Mostrar panel al jugar
+        ShowSongPanel();
         UpdateSongInfo();
     }
 
@@ -123,4 +171,3 @@ public class MusicManager : MonoBehaviour
     public AudioClip GetCurrentSong() => songs[currentSongIndex];
     public int GetCurrentIndex() => currentSongIndex;
 }
-

@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
     public void ShowMainMenu()
     {
         if (MusicManager.Instance != null)
-            MusicManager.Instance.StopMusic();
+            MusicManager.Instance.PlayMenuMusic();
 
         isPlaying = false;
         Time.timeScale = 1f;
@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour
         isPlaying = false;
 
         if (MusicManager.Instance != null)
-            MusicManager.Instance.StopMusic();
+            MusicManager.Instance.PlayVictorySound();
 
         if (ComboFireEffect.Instance != null)
             ComboFireEffect.Instance.ResetFire();
@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviour
         isPlaying = false;
 
         if (MusicManager.Instance != null)
-            MusicManager.Instance.StopMusic();
+            MusicManager.Instance.PlayGameOverSound();
 
       
         if (ComboFireEffect.Instance != null)

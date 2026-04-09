@@ -53,12 +53,21 @@ public class JudgmentDisplay : MonoBehaviour
 
         if (sprite == null || displayImage == null) return;
 
-        this.gameObject.SetActive(true);
+        // 1. Activar el objeto PRIMERO
+        if (!gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(true);
+        }
 
+        // 2. Detener corrutina previa si existe
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 
-        currentCoroutine = StartCoroutine(AnimateJudgment(sprite));
+        // 3. Verificar de nuevo si se puede iniciar
+        if (gameObject.activeInHierarchy)
+        {
+            currentCoroutine = StartCoroutine(AnimateJudgment(sprite));
+        }
     }
 
     private IEnumerator AnimateJudgment(Sprite sprite)

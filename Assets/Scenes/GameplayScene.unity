@@ -4114,7 +4114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &766679796
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14397,6 +14397,9 @@ MonoBehaviour:
   songNameText: {fileID: 363179806}
   artistNameText: {fileID: 1831628217}
   songInfoPanel: {fileID: 459948474}
+  menuLoop: {fileID: 8300000, guid: a3215e2c05bb8034c83e0bda7e7a3345, type: 3}
+  victorySound: {fileID: 8300000, guid: 31df771072ca3754a954f34a94d918e2, type: 3}
+  gameOverSound: {fileID: 8300000, guid: 18c36ce616e8ecc4dab9f0c5ac387c12, type: 3}
 --- !u!4 &1541199900
 Transform:
   m_ObjectHideFlags: 0
@@ -21217,7 +21220,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2025811870
 RectTransform:
   m_ObjectHideFlags: 0
