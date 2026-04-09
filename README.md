@@ -26,10 +26,10 @@
 * **Personalización:** Selector de 3 escenarios icónicos (Noche Dembow, Calles Dominicanas, Azotea).
 
 ## Screenshots
-![Menú Principal](enlace_a_tu_imagen_menu)
-![Gameplay](enlace_a_tu_imagen_gameplay)
-![Opciones](enlace_a_tu_imagen_opciones)
-![Leaderboard](enlace_a_tu_imagen_tabla)
+![Menú Principal](Screenshots/background_menu_principal.png)
+![Opciones](Screenshots/panel_opciones.png)
+![Gameplay](Screenshots/background_calles_dominicanas.png)
+![Leaderboard](Screenshots/panel_tablaclasificacion.png)
 
 
 ## Tecnologías Utilizadas
