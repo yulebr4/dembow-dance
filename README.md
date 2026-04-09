@@ -1,228 +1,40 @@
-\#  Dembow Dance
-
-
-
-Rhythm game dominicano desarrollado en Unity 6 para ISW-414
-
-
-
- Información del Proyecto
-
-Estudiante: Yulenny Bonilla
-
-Matrícula: 2023-0769
-
-Materia: ISW-414 Programación de Videojuegos
-
-Universidad: Universidad Central del Este (UCE)
-
-Fecha: Febrero 2026
-
-
-
-Descripción
-
-Juego de ritmo estilo "rhythm game" con temática de música dembow dominicana. El jugador debe presionar las teclas correctas al ritmo de la música cuando las notas lleguen a la zona de golpeo.
-
-
-
-Controles
-
-⬅️ Flecha Izquierda - Carril 1
-
-⬇️ Flecha Abajo - Carril 2  
-
-⬆️ Flecha Arriba - Carril 3
-
-➡️ Flecha Derecha - Carril 4
-
-
-
-Roadmap de Desarrollo
-
-
-
-Fase 1: Fundamentos (En Progreso)
-
-[x] Configuración inicial del proyecto
-
-[x] Setup de Git y GitHub
-
-[x] Estructura de carpetas organizada
-
-[ ] Sistema básico de notas cayendo
-
-[ ] Carriles y zonas de golpeo
-
-[ ] Prefab de notas
-
-
-
-Fase 2: Mecánicas Core
-
-[ ] Sistema de input del jugador
-
-[ ] Detección de timing (Perfect/Good/Miss)
-
-[ ] Sincronización con audio
-
-[ ] Feedback visual de aciertos/fallos
-
-
-
-Fase 3: Sistema de Puntuación
-
-[ ] Sistema de scoring funcional
-
-[ ] Sistema de combos
-
-[ ] Barra de vida/energía
-
-[ ] UI de puntuación en pantalla
-
-
-
-Fase 4: Interfaz y Menús
-
-[ ] Menú principal
-
-[ ] Selector de canciones
-
-[ ] Pantalla de Game Over con resultados
-
-[ ] Efectos visuales y partículas
-
-[ ] Polish de UI
-
-
-
-Fase 5: Contenido Musical
-
-[ ] Integración de música dembow
-
-[ ] Efectos de sonido (hit, miss, combo)
-
-[ ] Charting de mínimo 3 canciones
-
-[ ] Sistema de dificultad progresiva
-
-
-
-Fase 6: Finalización
-
-[ ] Testing completo
-
-[ ] Balance de dificultad
-
-[ ] Documentación técnica
-
-[ ] Video demo del juego
-
-[ ] Preparación de entrega
-
-
-
-Tecnologías
-
-Engine: Unity 6 (2D Built-In Render Pipeline)
-
-Lenguaje: C#
-
-Control de Versiones:* Git/GitHub
-
-IDE: Visual Studio / Rider
-
-
-
-Estructura del Proyecto
-
-```
-
-Assets/
-
-├── Scenes/           # Escenas del juego
-
-├── Scripts/          # Scripts de C#
-
-│   ├── Gameplay/     # Lógica del juego
-
-│   ├── UI/           # Interfaz de usuario
-
-│   └── Managers/     # Managers (Audio, Score, Game)
-
-├── Prefabs/          # Prefabs reutilizables
-
-├── Sprites/          # Imágenes y sprites
-
-│   ├── Notes/        # Sprites de notas
-
-│   ├── UI/           # Elementos de interfaz
-
-│   └── Backgrounds/  # Fondos
-
-├── Audio/            # Música y efectos de sonido
-
-│   ├── Music/        # Canciones dembow
-
-│   └── SFX/          # Efectos de sonido
-
-└── Resources/        # Recursos cargables dinámicamente
-
-&nbsp;   └── Songs/        # Datos de canciones (charts)
-
-```
-
-
-
-Estado Actual
-
-Proyecto inicializado. Estructura de carpetas creada y repositorio configurado en GitHub.
-
-
-
-Siguiente: Implementar sistema básico de notas.
-
-
-
-Screenshots
-
-(Se agregarán conforme avance el desarrollo)
-
-
-
-Cómo Ejecutar
-
-1. Clonar el repositorio
-
-2. Abrir el proyecto en Unity 6
-
-3. Abrir la escena `GameplayScene`
-
-4. Presionar Play
-
-
-
-Notas de Desarrollo
-
-Este proyecto está en desarrollo activo. Los commits se realizan frecuentemente para documentar el progreso.
-
-
-
-Mecánicas Planificadas
-
-Sistema de Timing: Perfect (±50ms), Good (±100ms), Miss (>100ms)
-
-Combos: Multiplicador que aumenta con hits consecutivos
-
-Dificultad: Velocidad de notas aumenta progresivamente
-
-Power-ups: Notas especiales con efectos únicos
-
-Temática Dominicana: Música dembow auténtica y estética cultural
-
-
-
-
-
-Proyecto Final - ISW-414 Programación de Videojuegos • UCE 2026
+# 🇩🇴 Dembow Dance
+**Rhythm game dominicano desarrollado en Unity 6** *Proyecto Final - ISW-414 Programación de Videojuegos*
+
+## Información del Estudiante
+* **Nombre: Yulenny Bonilla
+* **Matrícula:** 2023-0769
+* **Universidad:** Universidad Central del Este (UCE)
+* **Profesor:** Ivan Zorrilla
+* **Fecha:** Abril 2026
+
+## Descripción
+**Dembow Dance** es un juego de ritmo (rhythm game) que celebra la cultura urbana dominicana. El objetivo es presionar las flechas en el momento exacto en que las notas cruzan la zona de impacto al ritmo de los mejores tracks de dembow. El juego incluye un sistema de "fuego" visual para rachas perfectas y una dificultad progresiva que desafía hasta a los más veteranos.
+
+## Controles
+* ⬅️ **Flecha Izquierda**: Carril 1
+* ⬇️ **Flecha Abajo**: Carril 2
+* ⬆️ **Flecha Arriba**: Carril 3
+* ➡️ **Flecha Derecha**: Carril 4
+* ⌨️ **Esc**: Pausar el juego / Menú de ajustes
+
+## Características (Features)
+* **Dificultad Progresiva:** Sistema "Automático" donde la velocidad aumenta según el progreso de la canción.
+* **Sistema de Combo:** Multiplicador de puntos por aciertos consecutivos.
+* **Leaderboard Local:** Registro de los 10 mejores puntajes con nombre y dificultad.
+* **Feedback Visual:** Pantalla que vibra (Shake) al recibir daño y efectos de partículas de fuego en rachas de "Perfect".
+* **Personalización:** Selector de 3 escenarios icónicos (Noche Dembow, Calles Dominicanas, Azotea).
+
+## Screenshots
+![Menú Principal](enlace_a_tu_imagen_menu)
+![Gameplay](enlace_a_tu_imagen_gameplay)
+![Opciones](enlace_a_tu_imagen_opciones)
+![Leaderboard](enlace_a_tu_imagen_tabla)
+
+
+## Tecnologías Utilizadas
+* **Engine:** Unity 6
+* **Lenguaje:** C# (Scripts organizados por responsabilidades)
+* **UI:** TextMeshPro para fuentes pixel art.
+* **Control de Versiones:** Git & GitHub.
 
