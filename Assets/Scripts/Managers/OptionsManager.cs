@@ -9,6 +9,7 @@ public class OptionsManager : MonoBehaviour
     [Header("Panels")]
     public GameObject optionsPanel;
     public GameObject leaderboardPanel;
+    public GameObject controlsPanel;
 
     [Header("Difficulty Buttons")]
     public Button easyButton;
@@ -284,6 +285,47 @@ public class OptionsManager : MonoBehaviour
             {
                 scenarioSlots[i].gameObject.SetActive(false);
             }
+        }
+    }
+
+    public void OpenControls()
+    {
+        // 1. Ocultar el menú principal
+        if (GameManager.Instance != null && GameManager.Instance.mainMenuPanel != null)
+        {
+            GameManager.Instance.mainMenuPanel.SetActive(false);
+            // 2. Apagar partículas (como pediste)
+            GameManager.Instance.SetParticles(false);
+        }
+
+        if (ComboFireEffect.Instance != null)
+        {
+            ComboFireEffect.Instance.ResetFire();
+        }
+
+        // 3. Mostrar el panel de controles
+        if (controlsPanel != null)
+        {
+            controlsPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("¡OJO! No has arrastrado el ControlsPanel al script OptionsManager en el Inspector.");
+        }
+    }
+
+    public void CloseControls()
+    {
+        // 1. Ocultar el panel de controles
+        if (controlsPanel != null)
+            controlsPanel.SetActive(false);
+
+        // 2. Volver a mostrar el menú principal
+        if (GameManager.Instance != null && GameManager.Instance.mainMenuPanel != null)
+        {
+            GameManager.Instance.mainMenuPanel.SetActive(true);
+            // 3. Mantener partículas apagadas o encenderlas (tú decides)
+            GameManager.Instance.SetParticles(false);
         }
     }
 }

@@ -112,9 +112,13 @@ public class PauseManager : MonoBehaviour
         if (pauseMenuPanel != null)
             pauseMenuPanel.SetActive(false);
 
-        // Detener música al volver al menú
+        // Detener música
         if (MusicManager.Instance != null)
             MusicManager.Instance.StopMusic();
+
+        // AÑADE ESTO: Limpiar el fuego al abandonar la partida
+        if (ComboFireEffect.Instance != null)
+            ComboFireEffect.Instance.ResetFire();
 
         if (GameManager.Instance != null)
             GameManager.Instance.ShowMainMenu();

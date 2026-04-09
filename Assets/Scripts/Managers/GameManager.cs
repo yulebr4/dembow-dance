@@ -76,6 +76,11 @@ public class GameManager : MonoBehaviour
 
     public void ShowMainMenu()
     {
+        if (ComboFireEffect.Instance != null)
+        {
+            ComboFireEffect.Instance.ResetFire();
+        }
+
         if (MusicManager.Instance != null)
             MusicManager.Instance.PlayMenuMusic();
 
@@ -122,6 +127,7 @@ public class GameManager : MonoBehaviour
         CleanupNotes();
         InitializeUI();
     }
+
     // Llamado desde el boton JUGAR
     public void OnPlayButtonPressed()
     {
